@@ -7,8 +7,8 @@ type Meta = Record<string, any>;
 
 export const _loggedIn = ref(false);
 const _accessToken = ref<string | null>();
-const _user = ref<User | null>();
-const _meta = ref<Meta | null>();
+export const _user = ref<User | null>();
+export const _meta = ref<Meta | null>();
 export const _expiresAt = ref<number | null>();
 
 export const loggedIn = readonly(_loggedIn);
@@ -47,4 +47,12 @@ export function logout() {
 
 export function isExpired(): boolean {
   return expiresAt.value ? expiresAt.value <= Date.now() : false;
+}
+
+export function setCurrentUser(user: User, meta?: Meta) {
+  _user.value = user;
+
+  if (meta) {
+    _meta.value = meta;
+  }
 }
