@@ -110,12 +110,16 @@ const router = createRouter([
 
 The current user and meta are stored in memory, so they are cleared when the page is refreshed.
 
-You need to call your API's **Get Current User** endpoint when the application loads.
+You need to call your API's **Get Current User** endpoint when the application loads, then call the `setCurrentUser` function the with new user and meta values.
 
 ```vue
 <script setup>
+import { setCurrentUser } from 'vue-auth-helper';
+
 async function loadCurrentUser() {
-  // ...
+  const { user, meta } = await functionToGetCurrentUser();
+
+  setCurrentUser(user, meta);
 }
 
 loadCurrentUser();
@@ -126,12 +130,16 @@ loadCurrentUser();
 
 The access token is stored in memory, so it is cleared when the page is refreshed.
 
-You need to call your API's **Refresh Token** endpoint whenever the application loads.
+You need to call your API's **Refresh Token** endpoint whenever the application loads, then call the `login` function the with new access token, user, expires at and meta values.
 
 ```vue
 <script setup>
+import { login } from 'vue-auth-helper';
+
 async function refreshToken() {
-  // ...
+  const { accessToken, user, meta } = await functionToRefreshToken();
+
+  login(accessToken, user, expires_at, meta);
 }
 
 refreshToken();

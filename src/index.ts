@@ -8,6 +8,7 @@ export {
   login,
   logout,
   isExpired,
+  setCurrentUser,
 } from './auth';
 export { registerGuards } from './guards';
 

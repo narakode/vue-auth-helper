@@ -11,12 +11,17 @@ import {
   meta,
   user,
   isExpired,
+  _user,
+  setCurrentUser,
+  _meta,
 } from './auth';
 
 beforeEach(() => {
   vi.resetAllMocks();
   _loggedIn.value = false;
   _expiresAt.value = 0;
+  _user.value = null;
+  _meta.value = null;
 });
 
 describe('login', () => {
@@ -106,5 +111,29 @@ describe('isExpired', () => {
     _expiresAt.value = Date.now() + 24 * 60 * 60 * 1000;
 
     expect(isExpired()).toBe(false);
+  });
+});
+
+describe('setCurrentUser', () => {
+  test('sets user state only', () => {
+    login('test', { id: 1 }, 0, { menus: [] });
+
+    const newUser = { name: 'test' };
+
+    setCurrentUser(newUser);
+
+    expect(user.value).toEqual(newUser);
+    expect(meta.value).toEqual({ menus: [] });
+  });
+  test('sets user state and meta state', () => {
+    login('test', { id: 1 }, 0, { menus: [] });
+
+    const newUser = { name: 'test' };
+    const newMeta = { menus: ['admin'] };
+
+    setCurrentUser(newUser, newMeta);
+
+    expect(user.value).toEqual(newUser);
+    expect(meta.value).toEqual(newMeta);
   });
 });
