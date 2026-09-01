@@ -7,26 +7,51 @@ beforeEach(() => (_loggedIn.value = false));
 
 describe('auth', () => {
   describe('when require auth', () => {
-    test('return unauthenticated path when not logged in', () => {
-      const to = {
-        matched: [
-          {
-            meta: {
-              auth: true,
+    describe('when not logged in', () => {
+      test('return unauthenticated path', () => {
+        const to = {
+          matched: [
+            {
+              meta: {
+                auth: true,
+              },
             },
-          },
-        ],
-      };
+          ],
+        };
 
-      const auth = createAuthGuard({ redirectOnUnauthenticated: '/login' });
+        const auth = createAuthGuard({ redirectOnUnauthenticated: '/login' });
 
-      expect(
-        auth(
-          to as unknown as RouteLocationNormalized,
-          {} as RouteLocationNormalized,
-          vi.fn(),
-        ),
-      ).toEqual('/login');
+        expect(
+          auth(
+            to as unknown as RouteLocationNormalized,
+            {} as RouteLocationNormalized,
+            vi.fn(),
+          ),
+        ).toEqual({ path: '/login' });
+      });
+      test('return unauthenticated path with query params', () => {
+        const query = { a: 'xxx' };
+        const to = {
+          query,
+          matched: [
+            {
+              meta: {
+                auth: true,
+              },
+            },
+          ],
+        };
+
+        const auth = createAuthGuard({ redirectOnUnauthenticated: '/login' });
+
+        expect(
+          auth(
+            to as unknown as RouteLocationNormalized,
+            {} as RouteLocationNormalized,
+            vi.fn(),
+          ),
+        ).toEqual({ path: '/login', query });
+      });
     });
 
     test('continue when logged in', () => {

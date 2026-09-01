@@ -8,7 +8,10 @@ export function createAuthGuard(
 ): NavigationGuard {
   return (to) => {
     if (to.matched.some((route) => route.meta.auth) && !loggedIn.value) {
-      return options.redirectOnUnauthenticated;
+      return {
+        path: options.redirectOnUnauthenticated,
+        query: to.query,
+      };
     }
   };
 }
